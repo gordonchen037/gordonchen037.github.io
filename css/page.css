@@ -1,3 +1,10 @@
 main{
     flex: auto;
 }
+html{
+    background-color:black;
+}
+
+body {
+   margin: 0px;
+}
