@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <script type="text/javascript">
+        var svg;
+        var svglink = "http://www.w3.org/2000/svg"
+        var svg2;
+        
+        window.onload = function(e){
+        svg = document.getElementById("svg");
+        //線段<line></line>
+        var line = document.createElementNS(svglink,"line");
+        line.setAttribute("x1",50);
+        line.setAttribute("y1",50);
+        line.setAttribute("x2",350);
+        line.setAttribute("y2",350);
+        line.setAttribute("stroke","red");
+        line.setAttribute("stroke-width",2);
+        svg.appendChild(line);
+        //圓形<circle></circle>
+        var circle = document.createElementNS(svglink,"circle");
+        circle.setAttribute("cx",200);
+        circle.setAttribute("cy",50);
+        circle.setAttribute("r",50);
+        circle.setAttribute("fill","#ffcc00");
+        svg.appendChild(circle);
+        
+
+        //用函式簡化操作
+        function svgCreate(tagname,attrs){
+            var svgcreate = document.createElementNS(svglink,tagname);
+            for(var name in attrs){
+                svgcreate.setAttribute(name,attrs[name])
+            }
+            return svgcreate;
+        };
+        //方形<rect></rect>
+        var rect = svgCreate("rect",{
+            "x":150, "y":100,
+            "width":100, "height":100,
+            "fill":"blue"
+        });
+        svg.appendChild(rect);
+        
+        //建立繪圖操作介面 
+        svg2 = document.getElementById("svg2");
+        svg2.addEventListener("mousedown",mousedownSvg);
+       
+
+        function mousedownSvg(e){
+            var x = e.clientX;
+            var y = e.clientY;
+            var bounding = this.getBoundingClientRect();
+            x = x-bounding.left;
+            y = y-bounding.top;
+            var line = svgCreate("line",{
+                "x1":x, "y1":y,
+                "x2":x, "y2":y,
+                "stroke":"red","stroke-width":2
+            });
+            //alert(x)
+            this.appendChild(line);
+            var svgtext = document.getElementById("svgtext");
+            // 滑鼠移動時，要做的事
+            var drag = function(e){
+                line.setAttribute("x2",e.clientX-bounding.left);
+                line.setAttribute("y2",e.clientY-bounding.top);
+                svgtext.innerHTML = e.clientX+","+e.clientY+"\n"+bounding.left+","+bounding.top;
+            };
+            // 滑鼠放開時，要做的事
+            var drop = function(){
+                document.removeEventListener("mousemove",drag);
+                document.removeEventListener("mouseup",drop);
+            };
+            
+            document.addEventListener("mousemove",drag);
+            document.addEventListener("mouseup",drop);
+        }
+            
+                
+            
+        
+        //點擊後於svg 建立方形
+        /*function mousedownSvg(e){
+            var x = e.clientX;
+            var y = e.clientY;
+            var bounding = this.getBoundingClientRect();
+            x = x-bounding.left;
+            y = y-bounding.top;
+            // 加入一個方形
+            var rect1 = svgCreate("rect",{
+                "x":x, "y":y,
+                "width":100, "height":100,
+                "fill":"black"
+            });
+            this.appendChild(rect1);
+            }*/
+            
+        }
+        
+    </script>
+
+</head>
+<body>
+    <svg id="svg" width="500" height="360" style="border:1px solid blue;">
+    </svg>
+    <svg id="svg2" width="500" height="360" style="border:1px solid blue;">        
+    </svg>
+    <span id="svgtext"></span>
+</body>
+</html>
