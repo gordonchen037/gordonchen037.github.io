@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">           
+    </head>
+    <body>
+        <nav>
+            <li>123</li>
+            <li>123</li>
+            <li>123</li>
+        </nav>
+        
+        
+        <main>
+            
+            <button id="btn">點餐</button>
+            <div id="order"></div>
+                <table id="table">
+                    
+                </table>                
+                
+            
+        </main>
+        
+        <footer>
+        </footer>
+        <script>
+            var sugar = ["無糖","微糖","半糖","少糖","正常糖"];
+            var ice = ["去冰","微冰","少冰","正常冰","常溫","熱"];
+            var furit =["檸檬","蘋果","奇異果","百香果"];
+            var total = ["",0];
+            const menu1 = [
+                            {name:"紅茶",price:50,type:1},{name:"綠茶",price:50},{name:"青茶",price:50},{name:"西瓜牛奶",price:200},
+                            {name:"草莓牛奶",price:200},{name:"蘋果牛奶",price:200},{name:"珍珠鮮奶",price:150},
+                            {name:"布丁鮮奶",price:200},{name:"巧克力牛奶",price:200},
+                            {name:"布丁珍珠鮮奶",price:200},{name:"養樂多鮮奶",price:200},
+                            {name:"紅茶鮮奶茶",price:200},{name:"綠茶鮮奶茶",price:200},{name:"青茶鮮奶茶",price:200},
+                            {name:"原味純咖啡",price:100},{name:"拿鐵咖啡",price:200}
+                        ];
+            const menu2= [
+                {name:"檸檬愛玉",price:200},{name:"養樂多檸檬",price:200},{name:"養樂多紅茶",price:100},{name:"養樂多青茶",price:100},{name:"養樂多綠茶",price:100},
+                {name:"檸檬紅茶",price:100},{name:"檸檬綠茶",price:100},{name:"檸檬青茶",price:100},{name:"百香果紅茶",price:100},{name:"百香果綠茶",price:100},{name:"百香果青茶",price:100},
+                {name:"蘋果紅茶",price:100},{name:"蘋果綠茶",price:100},{name:"蘋果青茶",price:100},{name:"蜂蜜紅茶",price:100},{name:"蜂蜜綠茶",price:100},{name:"蜂蜜青茶",price:100},
+                {name:"蜂蜜百香紅茶",price:150},{name:"蜂蜜百香綠茶",price:150},{name:"蜂蜜百香青茶",price:150},{name:"水果茶",price:300}
+                ];
+            const menu3= [{name:"鮮榨果汁",price:300}];
+            window.onload=()=>{
+                var tb = document.getElementById("table");
+                var order = document.getElementById("order");
+                document.getElementById("btn").addEventListener("click", ()=>{
+                    let r1 = Math.floor(Math.random()*3 +1);                
+                    randDrink(r1);
+                })
+            };
+           
+            
+            function randDrink(r){          
+                let saveorder;                      
+                if (r == 1){
+                    let drink = Math.floor(Math.random()* menu1.length);
+                    let s = Math.floor(Math.random()* sugar.length);
+                    let i = Math.floor(Math.random()* ice.length);
+                    saveorder ="<div>"+menu1[drink].name + sugar[s] + ice[i] + " "+ menu1[drink].price +"</div>";
+                    total[1] += menu1[drink].price;                    
+                }
+                else if(r == 2){
+                    let drink = Math.floor(Math.random()* menu2.length);
+                    let s = Math.floor(Math.random()* sugar.length);
+                    let i = Math.floor(Math.random()* ice.length);
+                    saveorder = "<div>"+menu2[drink].name + sugar[s] + ice[i] + " "+ menu2[drink].price+"</div>";
+                    total[1] += menu2[drink].price;
+                }
+                else if(r == 3){                   
+                    let drink = getFuritDrink(furit.slice());
+                    let s = Math.floor(Math.random()* sugar.length);
+                    let i = getRandomInt(0,5);
+                    saveorder = "<div>"+menu3[0].name +"("+drink+")"+ sugar[s] + ice[i] + " "+ menu3[0].price+"</div>";   
+                    total[1] += menu3[0].price;                 
+                }
+                //order.innerHTML += saveorder;
+                total[0] += saveorder;
+                order.innerHTML = total[1]+" "+total[0] ;
+            }
+            function getRandomInt(min, max) {
+                min = Math.ceil(min);
+                max = Math.floor(max);
+                return Math.floor(Math.random() * (max - min)) + min; //不含最大值，含最小值
+            }
+            function getFuritDrink(array){
+                array.sort(() => Math.random() - 0.5);
+                return array[0]+array[array.length-1];
+            }
+
+        </script>
+    </body>
+</html>
