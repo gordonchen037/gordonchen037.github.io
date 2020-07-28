@@ -1,28 +1,34 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="utf-8">           
+        <meta charset="utf-8"> 
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+          <style>
+              #car .row>div{
+                  border: 1px solid;
+                  border-radius: 1px;
+              }
+          </style>
     </head>
     <body>
-        <nav>
-            <li>123</li>
-            <li>123</li>
-            <li>123</li>
-        </nav>
-        
-        
-        <main>
+               
             
-            <button id="btn">點餐</button>
-            <div id="order"></div>
-                <table id="table">
-                    
-                </table>                
-                
+        <main class="container">            
+            <div>
+                <button id="btn" class="btn btn-primary">點餐</button>
+                <button id="btn2" class="btn btn-success">結帳</button>
+            </div>
+            <div class="row">
+                <div class="col-4">Total Price</div>
+                <div class="col-8">Total Order</div>
+            </div>
+            <div id="car"></div>            
+            <div id="order"></div>               
             
         </main>
         
         <footer>
+            
         </footer>
         <script>
             var sugar = ["無糖","微糖","半糖","少糖","正常糖"];
@@ -35,7 +41,7 @@
                             {name:"布丁鮮奶",price:200},{name:"巧克力牛奶",price:200},
                             {name:"布丁珍珠鮮奶",price:200},{name:"養樂多鮮奶",price:200},
                             {name:"紅茶鮮奶茶",price:200},{name:"綠茶鮮奶茶",price:200},{name:"青茶鮮奶茶",price:200},
-                            {name:"原味純咖啡",price:100},{name:"拿鐵咖啡",price:200}
+                            {name:"原味純咖啡",price:100},{name:"拿鐵咖啡",price:200},{name:"鮮榨果汁",price:300}
                         ];
             const menu2= [
                 {name:"檸檬愛玉",price:200},{name:"養樂多檸檬",price:200},{name:"養樂多紅茶",price:100},{name:"養樂多青茶",price:100},{name:"養樂多綠茶",price:100},
@@ -43,13 +49,21 @@
                 {name:"蘋果紅茶",price:100},{name:"蘋果綠茶",price:100},{name:"蘋果青茶",price:100},{name:"蜂蜜紅茶",price:100},{name:"蜂蜜綠茶",price:100},{name:"蜂蜜青茶",price:100},
                 {name:"蜂蜜百香紅茶",price:150},{name:"蜂蜜百香綠茶",price:150},{name:"蜂蜜百香青茶",price:150},{name:"水果茶",price:300}
                 ];
-            const menu3= [{name:"鮮榨果汁",price:300}];
-            window.onload=()=>{
-                var tb = document.getElementById("table");
+            
+            window.onload=()=>{                
                 var order = document.getElementById("order");
-                document.getElementById("btn").addEventListener("click", ()=>{
-                    let r1 = Math.floor(Math.random()*3 +1);                
-                    randDrink(r1);
+                var tbd = document.getElementsByClassName(".tbd");
+                var car = document.getElementById("car");
+
+                document.getElementById("btn").addEventListener("click", ()=>{                                   
+                    randDrink(Math.floor(Math.random()*2 +1));                    
+                });
+
+                document.getElementById("btn2").addEventListener("click", ()=>{                    
+                    console.log(car)
+                    car.innerHTML += "<div class='row'><div class='col-4'>" + total[1]+"</div><div class='col-8'>"+total[0]+"</div></div>";
+                        order.innerHTML="";
+                        total=["",0];
                 })
             };
            
@@ -58,10 +72,18 @@
                 let saveorder;                      
                 if (r == 1){
                     let drink = Math.floor(Math.random()* menu1.length);
-                    let s = Math.floor(Math.random()* sugar.length);
-                    let i = Math.floor(Math.random()* ice.length);
-                    saveorder ="<div>"+menu1[drink].name + sugar[s] + ice[i] + " "+ menu1[drink].price +"</div>";
-                    total[1] += menu1[drink].price;                    
+                    if(menu1[drink].name == "鮮榨果汁"){
+                        let drink2 = getFuritDrink(furit.slice());
+                        let s = Math.floor(Math.random()* sugar.length);
+                        let i = getRandomInt(0,5);
+                        saveorder = "<div>"+menu1[drink].name +"("+drink2+")"+ sugar[s] + ice[i] + " "+ menu1[drink].price+"</div>";   
+                        total[1] += menu1[drink].price; 
+                    }else{
+                        let s = Math.floor(Math.random()* sugar.length);
+                        let i = Math.floor(Math.random()* ice.length);
+                        saveorder ="<div>"+menu1[drink].name + sugar[s] + ice[i] + " "+ menu1[drink].price +"</div>";
+                        total[1] += menu1[drink].price;
+                    }                                        
                 }
                 else if(r == 2){
                     let drink = Math.floor(Math.random()* menu2.length);
@@ -69,14 +91,7 @@
                     let i = Math.floor(Math.random()* ice.length);
                     saveorder = "<div>"+menu2[drink].name + sugar[s] + ice[i] + " "+ menu2[drink].price+"</div>";
                     total[1] += menu2[drink].price;
-                }
-                else if(r == 3){                   
-                    let drink = getFuritDrink(furit.slice());
-                    let s = Math.floor(Math.random()* sugar.length);
-                    let i = getRandomInt(0,5);
-                    saveorder = "<div>"+menu3[0].name +"("+drink+")"+ sugar[s] + ice[i] + " "+ menu3[0].price+"</div>";   
-                    total[1] += menu3[0].price;                 
-                }
+                }                
                 //order.innerHTML += saveorder;
                 total[0] += saveorder;
                 order.innerHTML = total[1]+" "+total[0] ;
